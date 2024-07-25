@@ -123,12 +123,12 @@ jobs:
 
     - name: Create artifacts folder
       run: |
-        mkdir -p /artifacts
+        mkdir -p ${{ github.workspace }}/artifacts
 
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
-        path: /artifacts
+        path: ${{ github.workspace }}/artifacts
     
     - name: Upload Release Asset
       uses: dwenegar/upload-release-assets@v1
@@ -136,4 +136,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         release_id: ${{ steps.create_release.outputs.id }}
-        assets_path: /artifacts
+        assets_path: ${{ github.workspace }}/artifacts
