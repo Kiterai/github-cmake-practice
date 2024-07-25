@@ -60,8 +60,7 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "artifact-filename=${{ matrix.os }}-${{ matrix.c_compiler }}.zip" >> "$GITHUB_OUTPUT"
-        echo "artifact-path=${{ github.workspace }}/../${{ steps.strings.outputs.artifact-filename }}" >> "$GITHUB_OUTPUT"
+        echo "artifact-path=${{ github.workspace }}/artifacts/${{ matrix.os }}-${{ matrix.c_compiler }}.zip" >> "$GITHUB_OUTPUT"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -86,6 +85,7 @@ jobs:
     - name: Zip artifacts
       id: zip
       run: |
+        mkdir -p ${{ github.workspace }}/artifacts
         zip -r ${{ steps.strings.outputs.artifact-path }} ${{ steps.strings.outputs.build-output-dir }}/
 
     - name: Upload artifact
@@ -95,6 +95,8 @@ jobs:
         path: ${{ steps.strings.outputs.artifact-path }}
 
   release:
+    needs: build
+  
     runs-on: ubuntu-latest
     steps:
     - name: Create release
