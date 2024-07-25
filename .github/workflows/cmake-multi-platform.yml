@@ -121,15 +121,19 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Download math result for job 2
+    - name: Create artifacts folder
+      run: |
+        mkdir -p /artifacts
+
+    - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
-        path: ${{ github.workspace }}/..
+        path: /artifacts
     
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1.0.2
+      uses: dwenegar/upload-release-assets@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}/../*.zip
+        release_id: ${{ steps.create_release.outputs.id }}
+        assets_path: /artifacts
