@@ -59,7 +59,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Install dependency (linux-aarch64)
-      if: c_compiler == 'aarch64-linux-gnu-gcc'
+      if: matrix.c_compiler == 'aarch64-linux-gnu-gcc'
       shell: bash
       run: |
         apt install -y g++-aarch64-linux-gnu
