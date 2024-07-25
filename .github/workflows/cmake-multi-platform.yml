@@ -60,7 +60,7 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "artifact-filename=${{ matrix.os }}-${{c_compiler}}.zip" >> "$GITHUB_OUTPUT"
+        echo "artifact-filename=${{ matrix.os }}-${{ matrix.c_compiler }}.zip" >> "$GITHUB_OUTPUT"
         echo "artifact-path=${{ github.workspace }}/../${{ steps.strings.outputs.artifact-filename }}" >> "$GITHUB_OUTPUT"
 
     - name: Configure CMake
