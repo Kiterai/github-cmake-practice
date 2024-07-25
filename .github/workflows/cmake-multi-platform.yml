@@ -84,7 +84,7 @@ jobs:
     - name: Zip artifacts
       run: |
         mkdir -p ${{ github.workspace }}/../artifacts
-        echo ${{ github.workspace }}/../artifacts/${{ matrix.os }}.zip >> $BUILD_ARTIFACT
+        echo "${{ github.workspace }}/../artifacts/${{ matrix.os }}.zip" >> "$BUILD_ARTIFACT"
         zip -r $BUILD_ARTIFACT $GITHUB_OUTPUT/
 
     - name: Create release
