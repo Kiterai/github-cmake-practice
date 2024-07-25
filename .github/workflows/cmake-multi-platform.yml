@@ -39,10 +39,6 @@ jobs:
             arch: ARM64
             option: 
           - os: ubuntu-latest
-            c_compiler: arm-linux-gnueabi-gcc
-            arch: ARM
-            option: 
-          - os: ubuntu-latest
             c_compiler: x86_64-linux-gnu-gcc
             arch: x86_64
             option: 
@@ -57,10 +53,16 @@ jobs:
           - os: macos-latest
             c_compiler: gcc
             arch: universal
-            option: -DCMAKE_OSX_ARCHITECTURES=x86_64;arm64
+            option: -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Install dependency (linux-aarch64)
+      if: c_compiler == 'aarch64-linux-gnu-gcc'
+      shell: bash
+      run: |
+        apt install -y g++-aarch64-linux-gnu
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
