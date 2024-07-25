@@ -60,7 +60,8 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "artifact=${{ github.workspace }}/../${{ matrix.os }}.zip" >> "$GITHUB_OUTPUT"
+        echo "artifact-filename=${{ matrix.os }}-${{c_compiler}}.zip" >> "$GITHUB_OUTPUT"
+        echo "artifact-path=${{ github.workspace }}/../${{ steps.strings.outputs.artifact-filename }}" >> "$GITHUB_OUTPUT"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -85,8 +86,17 @@ jobs:
     - name: Zip artifacts
       id: zip
       run: |
-        zip -r ${{ steps.strings.outputs.artifact }} ${{ steps.strings.outputs.build-output-dir }}/
+        zip -r ${{ steps.strings.outputs.artifact-path }} ${{ steps.strings.outputs.build-output-dir }}/
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifact
+        path: ${{ steps.strings.outputs.artifact-path }}
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
     - name: Create release
       id: create_release
       uses: actions/create-release@v1.1.4
@@ -96,19 +106,20 @@ jobs:
         tag_name: ${{ github.run_number }}
         release_name: Release ${{ github.ref }}
         body: |
-          Changes in this Release
-          - First Change
-          - Second Change
+          Test Release
         draft: false
         prerelease: false
 
+    - name: Download math result for job 2
+      uses: actions/download-artifact@v4
+      with:
+        name: artifact
+        path: ${{ github.workspace }}/..
+    
     - name: Upload Release Asset
-      id: upload-release-asset-linux
       uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.strings.outputs.artifact }}
-        asset_name: ${{ matrix.os }}.zip
-        asset_content_type: application/zip
+        asset_path: ${{ github.workspace }}/../*.zip
