@@ -62,7 +62,8 @@ jobs:
       if: matrix.c_compiler == 'aarch64-linux-gnu-gcc'
       shell: bash
       run: |
-        apt install -y g++-aarch64-linux-gnu
+        sudo apt-get update
+        sudo apt-get install g++-aarch64-linux-gnu
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
