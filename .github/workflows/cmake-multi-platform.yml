@@ -60,6 +60,7 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        echo "artifact-name=${{ matrix.os }}-${{ matrix.c_compiler }}" >> "$GITHUB_OUTPUT"
         echo "artifact-path=${{ github.workspace }}/artifacts/${{ matrix.os }}-${{ matrix.c_compiler }}.zip" >> "$GITHUB_OUTPUT"
 
     - name: Configure CMake
@@ -86,12 +87,13 @@ jobs:
       id: zip
       run: |
         mkdir -p ${{ github.workspace }}/artifacts
+        cd ${{ github.workspace }}/artifacts
         zip -r ${{ steps.strings.outputs.artifact-path }} ${{ steps.strings.outputs.build-output-dir }}/
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: artifact
+        name: ${{ steps.strings.outputs.artifact-name }}
         path: ${{ steps.strings.outputs.artifact-path }}
 
   release:
@@ -115,7 +117,6 @@ jobs:
     - name: Download math result for job 2
       uses: actions/download-artifact@v4
       with:
-        name: artifact
         path: ${{ github.workspace }}/..
     
     - name: Upload Release Asset
