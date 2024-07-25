@@ -87,8 +87,8 @@ jobs:
       if: matrix.os != 'windows-latest'
       run: |
         mkdir -p ${{ github.workspace }}/artifacts
-        cd ${{ github.workspace }}/artifacts
-        zip -r ${{ steps.strings.outputs.artifact-path }} ${{ steps.strings.outputs.build-output-dir }}/
+        cd ${{ steps.strings.outputs.build-output-dir }}
+        zip -r ${{ steps.strings.outputs.artifact-path }} ./
 
     - name: Zip artifacts (Windows)
       if: matrix.os == 'windows-latest'
