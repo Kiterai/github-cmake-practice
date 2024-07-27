@@ -21,19 +21,19 @@ jobs:
           - os: windows-latest
             c_compiler: cl
             arch: x86
-            option: -A Win32
+            option: CMAKE_GENERATOR_PLATFORM=Win32
           - os: windows-latest
             c_compiler: cl
             arch: x86_64
-            option: -A x64
+            option: CMAKE_GENERATOR_PLATFORM=x64
           - os: windows-latest
             c_compiler: cl
             arch: arm
-            option: -A ARM
+            option: CMAKE_GENERATOR_PLATFORM=ARM
           - os: windows-latest
             c_compiler: cl
             arch: arm64
-            option: -A ARM64
+            option: CMAKE_GENERATOR_PLATFORM=ARM64
           - os: ubuntu-latest
             c_compiler: aarch64-linux-gnu-gcc
             arch: ARM64
@@ -45,18 +45,23 @@ jobs:
           - os: macos-latest
             c_compiler: gcc
             arch: arm64
-            option: -DCMAKE_OSX_ARCHITECTURES=arm64
-          # - os: macos-latest
-          #   c_compiler: gcc
-          #   arch: x86_64
-          #   option: -DCMAKE_OSX_ARCHITECTURES=x86_64
-          # - os: macos-latest
-          #   c_compiler: gcc
-          #   arch: universal
-          #   option: -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+            option: CMAKE_OSX_ARCHITECTURES=arm64
+          - os: macos-latest
+            c_compiler: gcc
+            arch: x86_64
+            option: CMAKE_OSX_ARCHITECTURES=x86_64
+          - os: macos-latest
+            c_compiler: gcc
+            arch: universal
+            option: CMAKE_OSX_ARCHITECTURES=\"x86_64;arm64\"
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Set environment variables
+      shell: bash
+      run: |
+        echo "${{ matrix.option }}" >> "$GITHUB_ENV"
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -93,7 +98,6 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=Release
         -S ${{ github.workspace }}
-        ${{ matrix.option }}
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
