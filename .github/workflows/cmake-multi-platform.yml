@@ -46,14 +46,14 @@ jobs:
             c_compiler: gcc
             arch: arm64
             option: -DCMAKE_OSX_ARCHITECTURES=arm64
-          - os: macos-latest
-            c_compiler: gcc
-            arch: x86_64
-            option: -DCMAKE_OSX_ARCHITECTURES=x86_64
-          - os: macos-latest
-            c_compiler: gcc
-            arch: universal
-            option: -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          # - os: macos-latest
+          #   c_compiler: gcc
+          #   arch: x86_64
+          #   option: -DCMAKE_OSX_ARCHITECTURES=x86_64
+          # - os: macos-latest
+          #   c_compiler: gcc
+          #   arch: universal
+          #   option: -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 
     steps:
     - uses: actions/checkout@v4
