@@ -7,3 +7,7 @@ target_include_directories(hello PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(app main.cpp)
 target_link_libraries(app PRIVATE hello)
+
+find_package(Vulkan REQUIRED)
+target_include_directories(app PRIVATE ${Vulkan_INCLUDE_DIRS})
+target_link_libraries(app PRIVATE ${Vulkan_LIBRARIES})
