@@ -11,3 +11,5 @@ target_link_libraries(app PRIVATE hello)
 find_package(Vulkan REQUIRED)
 target_include_directories(app PRIVATE ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(app PRIVATE ${Vulkan_LIBRARIES})
+
+set_target_properties(hello app PROPERTIES CXX_STANDARD 17)
