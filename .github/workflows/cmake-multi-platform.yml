@@ -53,7 +53,7 @@ jobs:
           - os: macos-latest
             c_compiler: gcc
             arch: universal
-            option: CMAKE_OSX_ARCHITECTURES=\"x86_64;arm64\"
+            option: CMAKE_OSX_ARCHITECTURES=x86_64;arm64
 
     steps:
     - uses: actions/checkout@v4
